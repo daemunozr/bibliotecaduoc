@@ -14,8 +14,6 @@ public class LibroRepository {
 
 
     public LibroRepository(){
-        listaLibros.add(new Libro(0, null, null, null, 0, null));
-        listaLibros.add(new Libro(1, null, null, null, 0, null));
     }
     
     public List<Libro> obtenerLibros(){
