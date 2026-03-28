@@ -10,7 +10,7 @@ import com.example.bibliotecaduoc.model.Libro;
 
 @Repository
 public class LibroRepository {
-    private List<Libro> listaLibros = new ArrayList<>();
+    private final List<Libro> listaLibros = new ArrayList<>();
 
 
     public LibroRepository(){
