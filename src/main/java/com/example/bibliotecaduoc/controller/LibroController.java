@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.bibliotecaduoc.model.Libro;
 import com.example.bibliotecaduoc.services.LibroService;
 
+
+
 @RestController
 @RequestMapping("/api/v1/libros")
 
@@ -28,14 +30,35 @@ public class LibroController {
         return libroService.getLibros();
     }
 
+    @GetMapping("/antiguos")
+    public List<Libro> listaMinFechaPublicacionLibros() {
+        return libroService.getMinFechaPublicacionLibros();
+    }
+
+    @GetMapping("/nuevos")
+    public List<Libro> listaMaxFechaPublicacionLibros() {
+        return libroService.getMaxFechaPublicacionLibros();
+    }
+
+    @GetMapping("/ordenados")
+    public List<Libro> listaLibrosOrdenados(){
+        return libroService.getLibrosOrgenados();
+    }
+    
+
     @PostMapping
     public Libro agregaLibro(@RequestBody Libro libro){
         return libroService.guardarLibro(libro);
     }
 
     @GetMapping("{isbn}")
-    public Libro buscarLibro(@PathVariable String isbn){
+    public Libro buscarLibroPorIsbn(@PathVariable String isbn){
         return libroService.getLibroIsbn(isbn);
+    }
+
+    @GetMapping("{autor}")
+    public Libro buscarLibroPorAutor(@PathVariable String autor){
+        return libroService.getLibroAutor(autor);
     }
 
     @PutMapping("{isbn}")
@@ -48,8 +71,17 @@ public class LibroController {
         return libroService.borrarLibro(isbn);
     }
 
+    @GetMapping("/total")
+    public int totalLibros(){
+        return libroService.totalLibros();
+    }
 
+    @GetMapping("/total/{fechaPublicacion}")
+    public int totalLibros(@PathVariable int fechaPublicacion){
+        return libroService.totalLibros(fechaPublicacion);
+    }
 
+    
     
 
 }
