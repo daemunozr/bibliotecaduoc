@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import jakarta.validation.Valid;
 
 import com.example.bibliotecaduoc.model.Libro;
 import com.example.bibliotecaduoc.services.LibroService;
@@ -18,6 +21,7 @@ import com.example.bibliotecaduoc.services.LibroService;
 
 
 @RestController
+@RestControllerAdvice
 @RequestMapping("/api/v1/libros")
 
 public class LibroController {
@@ -47,7 +51,7 @@ public class LibroController {
     
 
     @PostMapping
-    public Libro agregaLibro(@RequestBody Libro libro){
+    public ResponseEntity<Libro> agregaLibro(@Valid @RequestBody Libro libro){
         return libroService.guardarLibro(libro);
     }
 
@@ -80,8 +84,4 @@ public class LibroController {
     public int totalLibros(@PathVariable int fechaPublicacion){
         return libroService.totalLibros(fechaPublicacion);
     }
-
-    
-    
-
 }
