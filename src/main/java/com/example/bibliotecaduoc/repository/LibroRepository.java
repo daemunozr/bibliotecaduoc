@@ -20,13 +20,6 @@ public class LibroRepository {
         return listaLibros;
     }
 
-    public Libro buscarPorId(int id){
-        for(Libro libro : listaLibros){
-            if(libro.getId() == id) return libro;
-        }
-        return null;
-    }
-
     public Libro buscarPorIsbn(String isbn){
         for(Libro libro : listaLibros){
             if(libro.getIsbn().equals(isbn)) return libro;
@@ -40,17 +33,14 @@ public class LibroRepository {
     }
 
     public Libro actualizar(Libro lib){
-        int id = 0;
-        int idPosicion = 0;
+        int posicion = 0;
 
         for(int i=0; i < listaLibros.size(); i++){
-            if(listaLibros.get(i).getId() == lib.getId()){
-                id = lib.getId();
-                idPosicion = i;
+            if(listaLibros.get(i).getIsbn().equals(lib.getIsbn())){
+                posicion = i;
             }
         }
         Libro libro_tmp = new Libro(
-            id,
             lib.getIsbn(),
             lib.getTitulo(),
             lib.getEditorial(),
@@ -58,12 +48,12 @@ public class LibroRepository {
             lib.getAutor()
         );
 
-        listaLibros.set(idPosicion, libro_tmp);
+        listaLibros.set(posicion, libro_tmp);
         return libro_tmp;
     }
 
-    public void eliminar(int id){
-        Libro libro_tmp = buscarPorId(id);
+    public void eliminar(String isbn){
+        Libro libro_tmp = buscarPorIsbn(isbn);
         if(libro_tmp != null) listaLibros.remove(libro_tmp);
     }
 }

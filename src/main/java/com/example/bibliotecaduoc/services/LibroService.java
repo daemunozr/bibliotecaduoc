@@ -21,17 +21,16 @@ public class LibroService {
         return libroRepository.guardar(libro);
     }
 
-    public Libro getLibroId(int id){
-        return libroRepository.buscarPorId(id);
+    public Libro getLibroIsbn(String isbn){
+        return libroRepository.buscarPorIsbn(isbn);
     }
 
     public Libro actualizarLibro(Libro libro){
         return libroRepository.actualizar(libro);
     }
 
-    public String borrarLibro(int id){
-        libroRepository.eliminar(id);
+    public String borrarLibro(String isbn){
+        libroRepository.eliminar(isbn);
         return "producto eliminado";
     }
-
 }

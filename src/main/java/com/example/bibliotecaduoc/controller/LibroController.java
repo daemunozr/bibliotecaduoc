@@ -33,19 +33,19 @@ public class LibroController {
         return libroService.guardarLibro(libro);
     }
 
-    @GetMapping("{id}")
-    public Libro buscarLibro(@PathVariable int id){
-        return libroService.getLibroId(id);
+    @GetMapping("{isbn}")
+    public Libro buscarLibro(@PathVariable String isbn){
+        return libroService.getLibroIsbn(isbn);
     }
 
-    @PutMapping("{id}")
-    public Libro actualizarLibro(@PathVariable int id, @RequestBody Libro libro){
+    @PutMapping("{isbn}")
+    public Libro actualizarLibro(@PathVariable String isbn, @RequestBody Libro libro){
         return libroService.actualizarLibro(libro);
     }
 
-    @DeleteMapping("{id}")
-    public String eliminarLibro(@PathVariable int id){
-        return libroService.borrarLibro(id);
+    @DeleteMapping("{isbn}")
+    public String eliminarLibro(@PathVariable String isbn){
+        return libroService.borrarLibro(isbn);
     }
 
 
