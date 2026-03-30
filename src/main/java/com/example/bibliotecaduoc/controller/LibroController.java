@@ -3,6 +3,8 @@ package com.example.bibliotecaduoc.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,17 +13,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import jakarta.validation.Valid;
 
 import com.example.bibliotecaduoc.model.Libro;
 import com.example.bibliotecaduoc.services.LibroService;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
-@RestControllerAdvice
 @RequestMapping("/api/v1/libros")
 
 public class LibroController {
@@ -30,58 +30,77 @@ public class LibroController {
     private LibroService libroService;
 
     @GetMapping
-    public List<Libro> listaLibros(){
-        return libroService.getLibros();
+    public ResponseEntity<List<Libro>> listaLibros(){
+        return ResponseEntity.ok(libroService.getLibros());
     }
 
     @GetMapping("/antiguos")
-    public List<Libro> listaMinFechaPublicacionLibros() {
-        return libroService.getMinFechaPublicacionLibros();
+    public ResponseEntity<List<Libro>> listaMinFechaPublicacionLibros() {
+        return ResponseEntity.ok(libroService.getMinFechaPublicacionLibros());
     }
 
     @GetMapping("/nuevos")
-    public List<Libro> listaMaxFechaPublicacionLibros() {
-        return libroService.getMaxFechaPublicacionLibros();
+    public ResponseEntity<List<Libro>> listaMaxFechaPublicacionLibros() {
+        return ResponseEntity.ok(libroService.getMaxFechaPublicacionLibros());
     }
 
     @GetMapping("/ordenados")
-    public List<Libro> listaLibrosOrdenados(){
-        return libroService.getLibrosOrgenados();
+    public ResponseEntity<List<Libro>> listaLibrosOrdenados(){
+        return ResponseEntity.ok(libroService.getLibrosOrgenados());
     }
     
 
     @PostMapping
-    public ResponseEntity<Libro> agregaLibro(@Valid @RequestBody Libro libro){
-        return libroService.guardarLibro(libro);
+    public ResponseEntity<?> agregaLibro(@Valid @RequestBody Libro libro){
+	try {
+		libroService.guardarLibro(libro);
+		return ResponseEntity.status(HttpStatus.CREATED).body(libro);
+	} catch (Exception e) {
+		return ResponseEntity.badRequest().body(e.getMessage());
+	}
     }
 
-    @GetMapping("{isbn}")
-    public Libro buscarLibroPorIsbn(@PathVariable String isbn){
-        return libroService.getLibroIsbn(isbn);
+    @GetMapping("/isbn/{isbn}")
+    public ResponseEntity<Libro> buscarLibroPorIsbn(@PathVariable String isbn){
+        return ResponseEntity.ok(libroService.getLibroIsbn(isbn));
     }
 
-    @GetMapping("{autor}")
-    public Libro buscarLibroPorAutor(@PathVariable String autor){
-        return libroService.getLibroAutor(autor);
+    @GetMapping("/autor/{autor}")
+    public ResponseEntity<Libro> buscarLibroPorAutor(@PathVariable String autor){
+        return ResponseEntity.ok(libroService.getLibroAutor(autor));
     }
 
-    @PutMapping("{isbn}")
-    public Libro actualizarLibro(@PathVariable String isbn, @RequestBody Libro libro){
-        return libroService.actualizarLibro(libro);
+    @PutMapping("/{isbn}")
+    public ResponseEntity<?> actualizarLibro(@Valid @RequestBody Libro libro){
+        try {
+		libroService.actualizarLibro(libro);
+		return ResponseEntity.ok(libro);
+	} catch (Exception e) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
     }
 
-    @DeleteMapping("{isbn}")
-    public String eliminarLibro(@PathVariable String isbn){
-        return libroService.borrarLibro(isbn);
+    @DeleteMapping("/{isbn}")
+    public ResponseEntity<?> eliminarLibro(@PathVariable String isbn){
+	try {
+		libroService.borrarLibro(isbn);
+		return ResponseEntity.noContent().build();
+	} catch (Exception e) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+	}
     }
 
     @GetMapping("/total")
-    public int totalLibros(){
-        return libroService.totalLibros();
+    public ResponseEntity<Integer> totalLibros(){
+        return ResponseEntity.ok(libroService.totalLibros());
     }
 
     @GetMapping("/total/{fechaPublicacion}")
-    public int totalLibros(@PathVariable int fechaPublicacion){
-        return libroService.totalLibros(fechaPublicacion);
+    public ResponseEntity<Integer> totalLibros(@PathVariable int fechaPublicacion){
+        return ResponseEntity.ok(libroService.totalLibros(fechaPublicacion));
     }
+
+    
+    
+
 }

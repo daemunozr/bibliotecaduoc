@@ -28,7 +28,9 @@ public class LibroService {
 	public List<Libro> getMaxFechaPublicacionLibros(){
 		return libroRepository.obtenerPorMaxFechaPublicacion();
 	}
-	public Libro guardarLibro(Libro libro){
+	public Libro guardarLibro(Libro libro) throws Exception{
+		if(libroRepository.buscarPorIsbn(libro.getIsbn()) != null)
+			throw new Exception("Error: Libro con ISBN " + libro.getIsbn() + "ya esta registrado");
 		return libroRepository.guardar(libro);
 	}
 
@@ -40,11 +42,17 @@ public class LibroService {
 		return libroRepository.buscarPorAutor(autor);
 	}
 
-	public Libro actualizarLibro(Libro libro){
+	public Libro actualizarLibro(Libro libro)throws Exception{
+
+		if(libroRepository.buscarPorIsbn(libro.getIsbn()) == null)
+			throw new Exception("Error: Libro no se encontro para actualizar");
 		return libroRepository.actualizar(libro);
 	}
 
-	public String borrarLibro(String isbn){
+	public String borrarLibro(String isbn) throws Exception{
+		
+		if(libroRepository.buscarPorIsbn(isbn) == null)
+			throw new Exception("Error: Libro no se encontro para borrar");
 		libroRepository.eliminar(isbn);
 		return "producto eliminado";
 	}
